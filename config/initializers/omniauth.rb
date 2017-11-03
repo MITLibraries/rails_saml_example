@@ -1,5 +1,11 @@
+# At app startup, parse the IdP metadata and configure the SP.
+
 idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
-idp_metadata = idp_metadata_parser.parse_remote_to_hash("https://touchstone.mit.edu/metadata/MIT-metadata.xml")
+idp_metadata = idp_metadata_parser.parse_remote_to_hash(
+  ENV['IDP_METADATA_URL'],
+  true, # validate cert
+  entity_id: ENV['IDP_ENTITY_ID']
+)
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :saml,
