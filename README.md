@@ -4,7 +4,11 @@
   loaded at application start to ensure it remains up to date.
 
 `IDP_ENTITY_ID` - If `IDP_METADATA_URL` returns more than one IdP (like MIT
-   does) entry, this setting signifies which IdP to use.
+  does) entry, this setting signifies which IdP to use.
+
+`IDP_SSO_URL` - the URL from the IdP metadata to use for authentication. I was
+  unable to extract this directly from the metadata with the ruby-saml tool
+  even though it for sure exists.
 
 `SP_ENTITY_ID` - unique identifier to this application,
   ex: `https://example.com/shibboleth`

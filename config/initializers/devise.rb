@@ -275,7 +275,26 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
+  idp_metadata_parser = OneLogin::RubySaml::IdpMetadataParser.new
+  idp_metadata = idp_metadata_parser.parse_remote_to_hash(
+    ENV['IDP_METADATA_URL'],
+    true, # validate cert
+    entity_id: ENV['IDP_ENTITY_ID']
+  )
+
   config.omniauth :saml,
-    idp_cert_fingerprint: 'fingerprint',
-    idp_sso_target_url: 'target_url'
+                  idp_cert_fingerprint: idp_metadata[:idp_cert_fingerprint],
+                  idp_sso_target_url: ENV['IDP_SSO_URL'],
+                  idp_cert: idp_metadata[:idp_cert],
+                  certificate: Base64.strict_decode64(ENV['SP_CERTIFICATE']),
+                  private_key: Base64.strict_decode64(ENV['SP_PRIVATE_KEY']),
+                  issuer: ENV['SP_ENTITY_ID'],
+                  request_attributes: {},
+                  security: { authn_requests_signed: true,
+                              want_assertions_signed: true,
+                              want_assertions_encrypted: true,
+                              metadata_signed: true,
+                              embed_sign: false,
+                              digest_method: XMLSecurity::Document::SHA1,
+                              signature_method: XMLSecurity::Document::RSA_SHA1 }
 end
