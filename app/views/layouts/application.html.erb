@@ -9,6 +9,15 @@
   </head>
 
   <body>
+    <% if flash %>
+      <% flash.each do |msg_type, message| %>
+        <% next if msg_type == 'global' %>
+        <div class="alert alert-banner <%= msg_type %>" role="alert">
+          <%= sanitize(message) %>
+        </div>
+      <% end %>
+    <% end %>
+    
     <%= yield %>
   </body>
 </html>
