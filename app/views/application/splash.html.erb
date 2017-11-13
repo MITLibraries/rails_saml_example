@@ -1,1 +1,7 @@
 <%= link_to "Sign in with SAML", user_saml_omniauth_authorize_path %>
+
+<% if current_user %>
+  <hr />
+  Email: <%= current_user.email %><br />
+  Provider: <%= current_user.provider %>
+<% end %>
